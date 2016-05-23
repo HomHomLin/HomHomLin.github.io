@@ -10,7 +10,7 @@ $(document).ready(function() {
       $('.content-wrapper').addClass('animated slideInRight');
     } else {
       $('.panel-cover').css('max-width',currentWidth);
-      $('.panel-cover').animate({'max-width': '465px', 'width': '26%'}, 400, swing = 'swing', function() {} );
+      $('.panel-cover').animate({'max-width': '480px', 'width': '28%'}, 400, swing = 'swing', function() {} );
     }
   });
 
