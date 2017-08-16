@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>美柚Android DEX分包演进之路 | HomHomLin</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="Android">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="美柚Android DEX分包演进之路 | HomHomLin">
+    <meta name="twitter:description" content="Android">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="美柚Android DEX分包演进之路 | HomHomLin">
+    <meta property="og:description" content="Android">
+
+    
+    <meta name="author" content="HomHomLin">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar.jpeg">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+
+    <link rel="canonical" href="http://yoursite.com/2016/05/20/dex/"/>
+
+    
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</head>
+
+<body class="home-template no-js">
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 HomHomLin 的主页"><img src="/images/avatar.jpeg" width="80" alt="HomHomLin logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for HomHomLin">HomHomLin</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">HomHomLin</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">HomHomLin's blog</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+              <li class="navigation__item"><a href="/page/about.html">关于博主</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/HomHomLin" title="查看我的GitHub主页" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-purple"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-05-20T08:08:33.000Z" class="post-list__meta--date date">2016-05-20</time> &#8226; <span class="post-meta__tags tags">于&nbsp;</span>
+    </div>
+    <h1 class="post-title">美柚Android DEX分包演进之路</h1>
+  </header>
+
+  <section class="post">
+    <h1 id="美柚Android-DEX分包演进之路"><a href="#美柚Android-DEX分包演进之路" class="headerlink" title="美柚Android DEX分包演进之路"></a>美柚Android DEX分包演进之路</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>相信绝大部分Android开发人员都遇到过方法数超过 65535 的问题。</p>
+<p>65536实际上是单个 DEX 文件内可引用的方法总数,超过这个数字, 就会导致 DEX 无法打包成功,出现错误。</p>
+<p>随着业务的不断发展,美柚也遇到了65535问题。</p>
+<h2 id="MultiDEX"><a href="#MultiDEX" class="headerlink" title="MultiDEX"></a>MultiDEX</h2><p>最开始,我们的解决方案是采用Google的Multidex,正常使用了几个版本后,美柚再次爆出了新的问题:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Too many classes in --main-dex-list, main dex capacity exceeded</span><br></pre></td></tr></table></figure>
+<p>这是因为Multidex实际上是将原本的一个DEX拆分成主DEX和其他DEX,原本我们只有一个DEX超过65535,拆分后变成了主DEX没有超过65536,但随着美柚业务的不断拓展,许多新的库和代码被添加进项目中,我们的主DEX再次超过了限制,导致了这个错误,所以我们现在需要做的是对主DEX进行拆分。</p>
+<h2 id="ManifestKeep"><a href="#ManifestKeep" class="headerlink" title="ManifestKeep"></a>ManifestKeep</h2><p>实际上Multidex是根据maindexlist.txt的内容来决定哪些类要被放进主DEX内的,而这份maindexlist是编译期生成的。</p>
+<p>maindexlist.txt包含以下几个东西:</p>
+<p><code>1.mainifest_keep.txt所定义的类</code></p>
+<p><code>2.mainifest_keep.txt所定义的类的相关依赖</code></p>
+<p><code>3.其他被偷偷插入的类</code></p>
+<p>又包含了mainifest_keep.txt文件所定义的类的相关依赖类。</p>
+<p>正常情况下,Android提供另一个默认的keep配置,我们通过SDK内的rules文件可以看到这个默认配置是哪些内容。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">  -keep public class * extends android.app.Instrumentation &#123;</span><br><span class="line">    &lt;init&gt;();</span><br><span class="line">  &#125;</span><br><span class="line">  -keep public class * extends android.app.Application &#123;</span><br><span class="line">    &lt;init&gt;();</span><br><span class="line">    void attachBaseContext(android.content.Context);</span><br><span class="line">  &#125;</span><br><span class="line">  -keep public class * extends android.app.Activity &#123;</span><br><span class="line">    &lt;init&gt;();</span><br><span class="line">  &#125;</span><br><span class="line">  -keep public class * extends android.app.Service &#123;</span><br><span class="line">    &lt;init&gt;();</span><br><span class="line">  &#125;</span><br><span class="line">  -keep public class * extends android.content.ContentProvider &#123;</span><br><span class="line">   &lt;init&gt;();</span><br><span class="line">  &#125;</span><br><span class="line">  -keep public class * extends android.content.BroadcastReceiver &#123;</span><br><span class="line">   &lt;init&gt;();</span><br><span class="line">  &#125;</span><br><span class="line">  -keep public class * extends android.app.backup.BackupAgent &#123;</span><br><span class="line">   &lt;init&gt;();</span><br><span class="line">  &#125;</span><br><span class="line"># We need to keep all annotation classes because proguard does not trace annotation attribute</span><br><span class="line"># it just filter the annotation attributes according to annotation classes it already kept.</span><br><span class="line">  -keep public class * extends java.lang.annotation.Annotation &#123;</span><br><span class="line">   *;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到mainifest_keep默认包含四大组件、注解以及其他东西。</p>
+<p>所以我们想到是否可以替换这份keep文件来决定主DEX的内容?答案是可以的。</p>
+<p>因此我们写了个gradle task,通过替换为自定义的keep文件来达到控制主DEX内容的目的。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">afterEvaluate &#123;</span><br><span class="line">        android.applicationVariants.each &#123;</span><br><span class="line">            variant -&gt;</span><br><span class="line">                <span class="keyword">def</span> collectTask = tasks.findByName(<span class="string">"collect$&#123;variant.name.capitalize()&#125;MultiDexComponents"</span>)<span class="comment">//collectZroTestDebugMultiDexComponents</span></span><br><span class="line">                <span class="keyword">if</span> (collectTask != <span class="literal">null</span>) &#123;</span><br><span class="line">                    List&lt;Action&lt;? super Task&gt;&gt; list = new ArrayList&lt;&gt;()</span><br><span class="line">                    list.add(new Action&lt;Task&gt;() &#123;</span><br><span class="line">                        @Override</span><br><span class="line">                        void execute(Task task) &#123;</span><br><span class="line">                            println "collect$&#123;variant.name.capitalize()&#125;MultiDexComponents action execute!---------XXXXXXX mini main dex生效了!!!!$projectDir"</span><br><span class="line">                            def dir = new File("$projectDir/build/intermediates/multi-dex/$&#123;variant.dirName&#125;");</span><br><span class="line">                            if (!dir.exists()) &#123;</span><br><span class="line">                                println "$dir 不存在,进行创建"</span><br><span class="line">                                dir.mkdirs()</span><br><span class="line">                            &#125;</span><br><span class="line">                            def manifestkeep = new File(dir.getAbsolutePath() + "/manifest_keep.txt")</span><br><span class="line">                            manifestkeep.delete()</span><br><span class="line">                            manifestkeep.createNewFile()</span><br><span class="line">                            println "先删除,后创建manifest_keep"</span><br><span class="line">                            def backManifestListFile = new File("$projectDir/manifest_keep.txt")</span><br><span class="line">                            backManifestListFile.eachLine &#123;</span><br><span class="line">                                line -&gt;</span><br><span class="line">                                    manifestkeep &lt;&lt; line &lt;&lt; '\n'</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;)</span><br><span class="line">                    collectTask.setActions(list)</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>通过替换,初步解决了主DEX过大的问题,减少了方法数量,我们也因此继续开发了一段时间，然而好景不长，近两个版本加入的SDK过多，导致application和lanucher页面直接依赖的方法是成功超越65535，再次暴出了too many classes in –main-dex-list；我们需要进一步优化。</p>
+<h2 id="外来之物"><a href="#外来之物" class="headerlink" title="外来之物"></a>外来之物</h2><p>我们重新检查了替换内容，当执行完keep文件替换后，我们打开build/multi-dex/components.flags，这个文件是multi-dex的日志文件，通过该文件，我们看到在输出keep_list的时候，有如下keep内容：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">-keep <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> * <span class="keyword">extends</span> <span class="title">android</span>.<span class="title">app</span>.<span class="title">Instrumentation</span> </span>&#123;</span><br><span class="line">    &lt;init&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> * <span class="keyword">extends</span> <span class="title">android</span>.<span class="title">app</span>.<span class="title">Application</span> </span>&#123;</span><br><span class="line">    &lt;init&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">attachBaseContext</span><span class="params">(android.content.Context)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> * <span class="keyword">extends</span> <span class="title">android</span>.<span class="title">app</span>.<span class="title">backup</span>.<span class="title">BackupAgent</span> </span>&#123;</span><br><span class="line">    &lt;init&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> * <span class="keyword">extends</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">annotation</span>.<span class="title">Annotation</span> </span>&#123;</span><br><span class="line">    &lt;fields&gt;;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-keep <span class="class"><span class="keyword">class</span> <span class="title">com</span>.<span class="title">android</span>.<span class="title">tools</span>.<span class="title">fd</span>.** </span>&#123;</span><br><span class="line">    &lt;fields&gt;;</span><br><span class="line">    &lt;methods&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这说明光是替换keep文件仍然没办法达到效果，编译时keep_list在其他地方被偷偷塞进一些奇怪的东西。</p>
+<p>经过跟踪，我们发现，在gradle的MultiDexTransform中，有这么一段代码：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> shrinkWithProguard(<span class="meta">@NonNull</span> File input) <span class="keyword">throws</span> IOException, ParseException &#123;</span><br><span class="line">     dontobfuscate();</span><br><span class="line">     dontoptimize();</span><br><span class="line">     dontpreverify();</span><br><span class="line">     dontwarn();</span><br><span class="line">     dontnote();</span><br><span class="line">     forceprocessing();</span><br><span class="line"></span><br><span class="line">     applyConfigurationFile(manifestKeepListProguardFile);</span><br><span class="line">     <span class="keyword">if</span> (userMainDexKeepProguard != <span class="literal">null</span>) &#123;</span><br><span class="line">         applyConfigurationFile(userMainDexKeepProguard);</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">// add a couple of rules that cannot be easily parsed from the manifest.</span></span><br><span class="line">     keep(<span class="string">"public class * extends android.app.Instrumentation &#123; &lt;init&gt;(); &#125;"</span>);</span><br><span class="line">     keep(<span class="string">"public class * extends android.app.Application &#123; "</span></span><br><span class="line">             + <span class="string">"  &lt;init&gt;(); "</span></span><br><span class="line">             + <span class="string">"  void attachBaseContext(android.content.Context);"</span></span><br><span class="line">             + <span class="string">"&#125;"</span>);</span><br><span class="line">     keep(<span class="string">"public class * extends android.app.backup.BackupAgent &#123; &lt;init&gt;(); &#125;"</span>);</span><br><span class="line">     keep(<span class="string">"public class * extends java.lang.annotation.Annotation &#123; *;&#125;"</span>);</span><br><span class="line">     keep(<span class="string">"class com.android.tools.fd.** &#123;*;&#125;"</span>); <span class="comment">// Instant run.</span></span><br><span class="line"></span><br><span class="line">     <span class="comment">// handle inputs</span></span><br><span class="line">     libraryJar(findShrinkedAndroidJar());</span><br><span class="line">     inJar(input);</span><br><span class="line"></span><br><span class="line">     <span class="comment">// outputs.</span></span><br><span class="line">     outJar(variantScope.getProguardComponentsJarFile());</span><br><span class="line">     printconfiguration(configFileOut);</span><br><span class="line"></span><br><span class="line">     <span class="comment">// run proguard</span></span><br><span class="line">     runProguard();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，gradle会往keep文件内塞入一些它自己的keep内容（话说这段居然是硬编码！不能通过配置文件来修改，忍不住吐槽下。），原来偷偷被塞进的东西是在这里，罪魁祸首竟然是Multi-Dex本身，那么这该怎么办呢？</p>
+<p>既然是gradle，那我们可以通过groovy对这段内容进行hook，将MultiDexTransform替换成我们自己写的Transform，而我们自己写的Transform则去掉这些硬编码的keep内容。</p>
+<p>成功替换了Transform后，我们发现components.flags中的确只输出了我们的keep内容，看来效果达到了。</p>
+<h2 id="DEXWalila"><a href="#DEXWalila" class="headerlink" title="DEXWalila"></a>DEXWalila</h2><p>通过上面的内容，我们知道主DEX是由maindexlist.txt决定的,是否可以通过替换maindexlist.txt来达到指定主DEX的内容?答案是可以的,但是这样我们需要替换整个DEX打包过程,包含依赖分析等,过于复杂,所以我们初步想到的是在各个阶段对最后生成的maindexlist做优化处理。</p>
+<p>我们分析主DEX的内容,发现并不完全是maindexlist.txt的内容,还包括了一些其他类,那么那些类是哪里来的呢。</p>
+<p>实际上DEX在被打包的时候,maindexlist的内容可能不能完全塞满主DEX,打包工具会认为主DEX还剩下这么多空间,太浪费了,所以还会往里面塞其他东西,这就是主DEX的内容和maindexlist的内容不完全一致的原因。</p>
+<p>因此我们首先要做的是不让这些额外的类进入主DEX,在dx.jar的com.android.dx.command.Dexer中设置–minimal-main-dex参数就可以不让这些额外的类进入主DEX。</p>
+<p>该参数是不暴露,不允许外部设置的,我们通过Anna(美柚架构组开发的一款Android hook工具)来hook Dexer中的main方法,更改入参为–minimal-main-dex。</p>
+<p>hook前,我们的方法数为6W,hook后,我们的方法数为5W,成功瘦身1W。</p>
+<p>但是进一步对比,发现主DEX的内容仍然无法和maindexlist.txt的内容对应,仍然存在一些其他类。</p>
+<p>通过研读dx代码,我们发现在MainDexListBuilder中的这段代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ClassReferenceListBuilder mainListBuilder = <span class="keyword">new</span> ClassReferenceListBuilder(path);</span><br><span class="line">            mainListBuilder.addRoots(jarOfRoots);</span><br><span class="line">            Iterator element = mainListBuilder.getClassNames().iterator();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span>(!element.hasNext()) &#123;</span><br><span class="line">                    <span class="keyword">if</span>(keepAnnotated) &#123;</span><br><span class="line">                        <span class="keyword">this</span>.keepAnnotated(path);</span><br><span class="line">                        var19 = <span class="keyword">false</span>;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        var19 = <span class="keyword">false</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                String className = (String)element.next();</span><br><span class="line">                <span class="keyword">this</span>.filesToKeep.add(className + <span class="string">".class"</span>);</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+<p>jarOfRoots是maindexlist.txt所依赖的类的jar包,通过上面的代码,我们可以看到maindexlist遍历完成后执行了keepAnnotated方法,进入keepAnnotated方法继续看。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">keepAnnotated</span><span class="params">(Path path)</span> <span class="keyword">throws</span> FileNotFoundException </span>&#123;</span><br><span class="line">    Iterator var2 = path.getElements().iterator();</span><br><span class="line"></span><br><span class="line">    label52:</span><br><span class="line">    <span class="keyword">while</span>(var2.hasNext()) &#123;</span><br><span class="line">        ClassPathElement element = (ClassPathElement)var2.next();</span><br><span class="line">        Iterator var4 = element.list().iterator();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            label48:</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                String name;</span><br><span class="line">                do &#123;</span><br><span class="line">                    <span class="keyword">if</span>(!var4.hasNext()) &#123;</span><br><span class="line">                        <span class="keyword">continue</span> label52;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    name = (String)var4.next();</span><br><span class="line">                &#125; <span class="keyword">while</span>(!name.endsWith(<span class="string">".class"</span>));</span><br><span class="line"></span><br><span class="line">                DirectClassFile clazz = path.getClass(name);</span><br><span class="line">                <span class="keyword">if</span>(<span class="keyword">this</span>.hasRuntimeVisibleAnnotation(clazz)) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.filesToKeep.add(name);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    MethodList methods = clazz.getMethods();</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> fields = <span class="number">0</span>; fields &lt; methods.size(); ++fields) &#123;</span><br><span class="line">                        <span class="keyword">if</span>(<span class="keyword">this</span>.hasRuntimeVisibleAnnotation(methods.get(fields))) &#123;</span><br><span class="line">                            <span class="keyword">this</span>.filesToKeep.add(name);</span><br><span class="line">                            <span class="keyword">continue</span> label48;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    FieldList var10 = clazz.getFields();</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; var10.size(); ++i) &#123;</span><br><span class="line">                        <span class="keyword">if</span>(<span class="keyword">this</span>.hasRuntimeVisibleAnnotation(var10.get(i))) &#123;</span><br><span class="line">                            <span class="keyword">this</span>.filesToKeep.add(name);</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>filesToKeep是最后主DEX的内容,我们发现该方法对Path进行了遍历,Path是项目中所有class的集合jar,该方法遍历了所有class,通过hasRuntimeVisibleAnnotation来决定class是否放入主DEX中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">hasRuntimeVisibleAnnotation</span><span class="params">(HasAttribute element)</span> </span>&#123;</span><br><span class="line">    Attribute att = element.getAttributes().findFirst(<span class="string">"RuntimeVisibleAnnotations"</span>);</span><br><span class="line">    <span class="keyword">return</span> att != <span class="keyword">null</span> &amp;&amp; ((AttRuntimeVisibleAnnotations)att).getAnnotations().size() &gt; <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>hasRuntimeVisibleAnnotation返回这个类或者方法是否拥有可见注解,如果有就加入到maindexlist,至此,我们知道了maindexlist的内容有:</p>
+<p><code>1.mainifest_keep.txt的相关依赖</code></p>
+<p><code>2.依赖可见的annotation的类</code></p>
+<p>因此我们项目主DEX爆炸的原因就是这两个类集合过多导致。</p>
+<p>为什么要将可见的annotation相关类放进主DEX呢?</p>
+<p>实际上,有很多库或者组件是通过注解实现的,比如Dagger等,这些组件依赖注解,DEX分包可能会对他们造成影响,因此默认将这些类放入主DEX,但是由于我们项目相关类太多,导致主DEX直接爆炸。</p>
+<p>找到原因后,我们通过Anna hook到相关方法,修改其执行逻辑。</p>
+<p>通过自定义keep文件成功的将主DEX内5W的方法缩减到了2W。</p>
+<p>随后,我们编写了一个叫DEXWalila的gradle插件用于处理主DEX问题。</p>
+<h2 id="新的问题"><a href="#新的问题" class="headerlink" title="新的问题"></a>新的问题</h2><p>通过DEXWalila，我们完成了对主DEX的内容控制，极大的缩减了主DEX的大小，使美柚的主DEX只有53KB，提升了APP启动的响应速度。但是实际使用中，我们发现APP虽然启动很快，但是第一次安装（或版本升级）后，APP进入欢迎界面的时间却很长，而后续启动却没有这个问题，经过观察发现实际上Dex优化前的APP以前版本第一次启动欢迎界面也会有较长时间，这是为什么呢？</p>
+<p>要想知道为什么，首先我们要知道为什么这种情况会出现在第一次。</p>
+<h2 id="万恶的MultiDex"><a href="#万恶的MultiDex" class="headerlink" title="万恶的MultiDex"></a>万恶的MultiDex</h2><p>我们知道一旦业务多了，App就会变大，产生65535。用了MultiDex后，65535的问题得到解决，但应用的Dex数量也会变多，主要是MultiDex将原本的1个Dex切割成了几个Dex，编译打包时，这些dex会随主DEX被打入Apk中。</p>
+<p>当用户安装了应用，点击icon启动应用时，系统只会加载主DEX，其他副Dex只有当主Dex启动后调用MultiDex.install才会被载入到PathClassLoader中，而MultiDex.install则是我们手动调用的，系统并不会主动调用，而副Dex被加载后，应用内相关的业务才算正式可以运行。</p>
+<p>实际上Android系统默认并不是直接运行Apk的Dex文件的，而是有一个DEX优化过程，这个是dex提前解释的阶段，在Dalvik虚拟机下这个过程是dex2opt，输出odex文件，在ART虚拟机下这个过程是dex2oat，输出oat文件，这些文件会被缓存到Android系统目录中，Android系统实际上加载的是这些被优化过的dex。</p>
+<p>一个新应用安装后（版本升级）初次启动，系统会先解压apk，提取主DEX，加载主DEX，然后根据信息到缓存目录寻找是否存在优化的dex文件，如果有则加载优化的dex，没有就将主DEX进行对应的优化，保存到缓存目录，再加载这个优化过的dex，启动App，app启动后当执行到MultiDex.install的时候，系统会查看apk中是否存在其他dex，然后将他们提取优化，也就是主DEX的那一系列步骤。</p>
+<p>而MultiDex.install是无法被放到异步线程的，因为我们无法确保这个dex内的业务是否需要马上被使用，所以MultiDex.install只能放置在主线程，而这一步骤相对耗时，万一这一步骤执行较长，达到了5秒，那么App就会ANR，所以MultiDex.install是耗时的万恶之源。</p>
+<h2 id="美柚之前的思路"><a href="#美柚之前的思路" class="headerlink" title="美柚之前的思路"></a>美柚之前的思路</h2><p>美柚采用的做法是当Application启动时，启动一个私有进程：mini，同时主进程阻塞轮询，mini进程进行MultiDex.install，完成后创建一个文件，主进程轮询到有文件后进行Application后续的操作打开。</p>
+<p>所以我们可以模拟美柚启动的情况，用户启动APP，系统需要花费时间加载主DEX，由于初次安装（或升级）又花费了时间去做dex优化，（这里的加载和优化dex的时间根据主DEX大小而异，因为现在优化到53KB，所以这步变的很快，之前是7.3MB），主DEX启动后，Application启动，创建私有进程mini进行MultiDex.install开始加载其他副Dex，加载副Dex后又进行了Dex优化，导致整个时间较长，优化完毕后Application才进行后续的操作。</p>
+<p>但是这个耗时仍然是无法避免的，统计发现这个时间在10s左右。</p>
+<p>另外由于插件化是以apk打包的，所以如果我们使用插件化，那么插件中的dex也必然会耗费很长的加载时间，这显然是个必须解决的问题。</p>
+<h2 id="Dex瓦莉拉2-0"><a href="#Dex瓦莉拉2-0" class="headerlink" title="Dex瓦莉拉2.0"></a>Dex瓦莉拉2.0</h2><p>瓦莉拉1.0虽然减小了主DEX的大小，使App能达到毫秒级响应，但是没有对Dex加载速度进行优化。</p>
+<p>那有没有什么办法来优化这个时间呢？</p>
+<p>我们首先想到的是跳过系统优化DEX的时间。</p>
+<p>主DEX的时间我们是没办法避免的，因为这是系统必须做的，我们唯一能优化主DEX加载时间的办法只有尽可能的让主DEX变小，好在主DEX目前已经能被瓦莉拉缩小到了53K，他的响应速度已经达到了毫秒级别，唯一需要处理的就是副DEX。</p>
+<p>我们首先想到如果我们内置优化过的dex到apk中，主dex加载后释放这些优化过的dex到系统缓存目录是否就可行了呢？答案是不行的，因为这个DEX优化过程因设备而定，不同的设备优化文件有所不同。</p>
+<p>但是我们找到了另一个优化办法，那就是不让系统进行dex优化，优化工作放到后台。</p>
+<p>实际上在ART虚拟机下，系统是支持直接原始dex解释的，我们完全可以不需要让系统进行dex优化，但是我们却想使用这个系统优化的dex文件，所以我们可以这样做：应用启动，判断dex是否已经优化过，如果没有则跳过dex优化，直接将DEX载入执行Application后续操作，同时将优化放置到后台，下次启动时直接使用优化的dex文件，这样优化dex的时间就不会被安排到用户启动app的时间上，一切无感知。</p>
+<p>要做到这点，我们需要明白dex优化的步骤在哪里。</p>
+<h3 id="ART虚拟机"><a href="#ART虚拟机" class="headerlink" title="ART虚拟机"></a>ART虚拟机</h3><p>通过对代码的跟踪，我们发现，dex优化虽然是MultiDex.install触发的，但是代码却不在MultiDex中，在ART虚拟机模式下，DEX优化新建一个进程通过/system/bin/dex2oat命令进入libc.so的execv方法中，主进程保持阻塞，待新建进程execv执行完毕后继续，所以我们只需要hook这个execv方法，判断如果是/system/bin/dex2oat发起就直接退出当前进程，让主进程不阻塞就可以了。</p>
+<p>但是libc.so不在Java层，而在系统内，通过美柚安娜无法达到hook，所以只能通过Cydia进行hook，JNI hook代码如下。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># Walila.cpp</span><br><span class="line"># lhh 2017/7/30</span><br><span class="line"></span><br><span class="line">int meetyou_execv(const char *name, char **argv) &#123;</span><br><span class="line">    if(isDex2oat()) &#123;</span><br><span class="line">        //如果是dex2oat就直接退出</span><br><span class="line">        exit(0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return origin_execv(name, argv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>hook完毕后，我们就可以跳过系统优化dex的时间，应用到美柚中，第一次启动MultiDex.install的返回耗时达到了毫秒级。</p>
+<p>但是这只是跳过优化时间，我们还是需要系统优化过的dex，因此我们对hook方法进行了改造，当我们的Application启动时判断是否有优化的dex，没有则进行hook，同时创建一个私有进程进行优化，优化完毕后保存结果提供给Application下次启动时使用。</p>
+<h3 id="Dalvik虚拟机"><a href="#Dalvik虚拟机" class="headerlink" title="Dalvik虚拟机"></a>Dalvik虚拟机</h3><p>Dalvik虚拟机默认情况下不支持Dex文件，但是在JNI层提供了一个openDexFile(byte *file)的方法，openDexFile没有对应的Java层，只能通过JNI HOOK。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>通过这一系列的处理，美柚的dex第一次安装加载速度从10s降低到了10ms,加载速度达到了真正意义的毫秒级，从主Dex内容的控制到Dex加载的控制，我们都能随心所欲。</p>
+<p>目前这一系列技术已经在瓦莉拉2.0中实现。</p>
+<p>以上就是美柚在DEX拆分上的解决方案,通过该方案,我们成功的控制了主DEX的内容,减少了主DEX的大小。</p>
+<p>linhh 2017.07.24</p>
+
+  </section>
+
+</article>
+<section class="read-more">
+           
+    
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/05/20/gradle/" title="gradle-publish">gradle-publish</a></h2>
+                <p class="excerpt">
+                
+                http://blog.csdn.net/linhh90/article/details/50510725
+##介绍本项目包含一些Gradle脚本及属性文件，用于使用Gradle发布项目.
+bintray.gradle: 用于发布到JCenter的脚本。
+build.gradle: 怎么使用它的De
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-05-20T08:08:33.000Z" class="post-list__meta--date date">2016-05-20</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2016/05/20/gradle/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+    </span>
+    <span class="footer__copyright">
+        基于 <a href="http://hexo.io">Hexo</a> 引擎强力驱动，感谢 <a href="https://pages.github.com/">GitHub Pages</a> 提供免费的托管服务
+    </span>
+    <span class="footer__copyright">
+        &copy; 2016 - 本站由 <a href="https://github.com/homhomlin">@HomHomLin</a> 创建
+    </span>
+</footer>
+
+        </div>
+    </div>
+
+    
+
+     
+</body>
+</html>
