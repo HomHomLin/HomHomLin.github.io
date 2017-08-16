@@ -152,6 +152,23 @@ var _hmt = _hmt || [];
   
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2016/05/20/dex/" title="link to post.title">美柚Android DEX分包演进之路</a></h2>
+      <p class="excerpt">
+    
+      前言相信绝大部分Android开发人员都遇到过方法数超过 65535 的问题。
+65536实际上是单个 DEX 文件内可引用的方法总数,超过这个数字, 就会导致 DEX 无法打包成功,出现错误。
+随着业务的不断发展,美柚也遇到了65535问题。
+MultiDEX最开始,我们的解决方案是采用Google的Multidex,正常使用了几个版本后,美柚再次爆出了新的问题:
+1Too many classes in --main-dex-list, main dex capacity exceeded
+
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2016-05-20T08:08:33.000Z" class="post-list__meta--date date">2016-05-20</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2016/05/20/dex/">继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+  
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2016/05/20/gradle/" title="link to post.title">gradle-publish</a></h2>
       <p class="excerpt">
     
@@ -165,23 +182,6 @@ gradle.properties: 在bintray.gradle中要用到的属性，需要拷贝到你�
     &hellip;
       </p>
       <div class="post-list__meta"><time datetime="2016-05-20T08:08:33.000Z" class="post-list__meta--date date">2016-05-20</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2016/05/20/gradle/">继续阅读</a></div>
-      <hr class="post-list__divider" />
-    </li>
-  
-    
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="/2016/05/20/dex/" title="link to post.title">美柚Android DEX分包演进之路</a></h2>
-      <p class="excerpt">
-    
-      前言相信绝大部分Android开发人员都遇到过方法数超过 65535 的问题。
-65536实际上是单个 DEX 文件内可引用的方法总数,超过这个数字, 就会导致 DEX 无法打包成功,出现错误。
-随着业务的不断发展,美柚也遇到了65535问题。
-MultiDEX最开始,我们的解决方案是采用Google的Multidex,正常使用了几个版本后,美柚再次爆出了新的问题:
-1Too many classes in --main-dex-list, main dex capacity exceeded
-
-    &hellip;
-      </p>
-      <div class="post-list__meta"><time datetime="2016-05-20T08:08:33.000Z" class="post-list__meta--date date">2016-05-20</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2016/05/20/dex/">继续阅读</a></div>
       <hr class="post-list__divider" />
     </li>
   
